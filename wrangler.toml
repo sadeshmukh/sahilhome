@@ -1,0 +1,4 @@
+name = "sahilhome"
+compatibility_date = "2024-04-04"
+
+assets = { directory = "dist" }
