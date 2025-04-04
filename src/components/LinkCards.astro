@@ -1,0 +1,85 @@
+---
+const links = [
+  {
+    title: "Blog",
+    description: "What I write about",
+    url: "https://blog.sahil.ink/",
+    icon: "//",
+  },
+  {
+    title: "About",
+    description: "Who I am",
+    url: "https://blog.sahil.ink/about",
+    icon: "><",
+  },
+  {
+    title: "Server",
+    description: "My dashboard",
+    url: "https://homarr.sahil.ink/",
+    icon: "[]",
+  },
+];
+---
+
+<div class="link-cards">
+  {
+    links.map((link) => (
+      <a href={link.url} class="card">
+        <span class="icon">{link.icon}</span>
+        <h2>{link.title}</h2>
+        <p>{link.description}</p>
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .link-cards {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .card {
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 180px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    background: rgba(0, 255, 153, 0.1);
+    border-color: rgba(0, 255, 153, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 153, 0.1);
+  }
+
+  .icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 1rem;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji",
+      sans-serif;
+  }
+
+  h2 {
+    color: #00ff99;
+    font-family: "42dot Sans", monospace;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: rgba(0, 255, 153, 0.7);
+    font-family: "Chakra Petch", monospace;
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+</style>

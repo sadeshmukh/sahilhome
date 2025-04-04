@@ -1,0 +1,61 @@
+---
+// this will be the black page that initially occludes the screen, plays an animation, then hides itself
+---
+
+<div class="occluded-page" id="occluded-page">
+  <div class="occluded-content">
+    <div class="circle green-circle"></div>
+    <div class="circle black-circle"></div>
+  </div>
+</div>
+
+<script>
+  import { animate, stagger } from "animejs";
+  animate(".circle", {
+    scale: [0, 12],
+    duration: 1000,
+    easing: "easeInOutSine",
+    delay: stagger(500),
+  }).then(() => {
+    animate(".occluded-page", {
+      opacity: [1, 0],
+      duration: 200,
+      easing: "easeInOutSine",
+      onComplete: () => {
+        const occludedPage = document.getElementById("occluded-page");
+        if (occludedPage) {
+          occludedPage.style.display = "none";
+        }
+      },
+    });
+  });
+</script>
+
+<style>
+  .occluded-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 1000;
+  }
+
+  .circle {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+  }
+
+  .green-circle {
+    background-color: #00ff99;
+  }
+
+  .black-circle {
+    background-color: #000000;
+  }
+</style>

@@ -1,0 +1,192 @@
+---
+const socials = [
+  {
+    name: "GitHub",
+    url: "https://github.com/sadeshmukh",
+    icon: "socials/github.svg",
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/sahil-deshmukh-321bb32a5/",
+    icon: "socials/linkedin.svg",
+  },
+  {
+    name: "Mastodon",
+    url: "https://mastodon.sahil.ink/@sadeshmukh",
+    icon: "socials/mastodon.svg",
+  },
+  {
+    name: "MonkeyType",
+    url: "https://monkeytype.com/profile/sadeshmukh",
+    icon: "socials/monkeytype.svg",
+  },
+  {
+    name: "Bento",
+    url: "https://bento.me/sadeshmukh",
+    icon: "socials/bento.svg",
+  },
+];
+
+const currentYear = new Date().getFullYear();
+---
+
+<div class="footer">
+  <div class="social-links">
+    {
+      socials.map((social) => (
+        <a
+          href={social.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-link"
+        >
+          <img src={social.icon} alt={social.name} width="24" height="24" />
+          <span class="sr-only">{social.name}</span>
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="built-with-container">
+    <div class="built-with">
+      <p>
+        Built with
+        <a href="https://astro.build" target="_blank" rel="noopener noreferrer">
+          <img src="tech/astro.svg" alt="Astro" width="20" height="20" />
+          <span>Astro</span>
+        </a>
+        <a
+          href="https://simpleicons.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="tech/simpleicons.svg"
+            alt="Simple Icons"
+            width="20"
+            height="20"
+          />
+          <span>Simple Icons</span>
+        </a>
+        <a href="https://cursor.sh" target="_blank" rel="noopener noreferrer">
+          <img src="tech/cursor.svg" alt="Cursor" width="20" height="20" />
+          <span>Cursor</span>
+        </a>
+      </p>
+      <p class="copyright">&copy; {currentYear} Sahil Deshmukh</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .footer {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    z-index: 10;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .social-link {
+    color: #00ff99;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    padding: 0.75rem;
+    border-radius: 50%;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    cursor: pointer;
+    filter: brightness(0) invert(1);
+  }
+
+  .social-link:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    background: rgba(0, 255, 153, 0.1);
+    border-color: rgba(0, 255, 153, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 153, 0.1);
+  }
+
+  .social-link img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+  }
+
+  .built-with-container {
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.1);
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .built-with {
+    text-align: center;
+    font-family: "Chakra Petch", monospace;
+    font-size: 0.9rem;
+    color: rgba(0, 255, 153, 0.7);
+  }
+
+  .built-with p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .built-with a {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+  }
+
+  .built-with a:hover {
+    opacity: 1;
+  }
+
+  .built-with img {
+    filter: brightness(0) invert(1);
+  }
+
+  .copyright {
+    margin-top: 0.5rem;
+    opacity: 0.5;
+    font-family: "Chakra Petch", monospace;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

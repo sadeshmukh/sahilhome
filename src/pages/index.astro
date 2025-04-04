@@ -1,11 +1,85 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Background from "../components/Background.astro";
+import Sahil from "../components/Sahil.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+import RoleText from "../components/RoleText.astro";
+import LinkCards from "../components/LinkCards.astro";
+import OccludedPage from "../components/OccludedPage.astro";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html>
+  <head>
+    <style is:global>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        background-color: #0a0a0a;
+      }
+    </style>
+  </head>
+  <body>
+    <OccludedPage />
+    <main>
+      <Background />
+      <Sahil />
+      <div class="role-text-container">
+        <RoleText />
+      </div>
+      <LinkCards />
+      <SocialLinks />
+    </main>
+  </body>
+</html>
+
+<style>
+  main {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Position RoleText */
+  :global(.role-text) {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  /* Position LinkCards at the top */
+  :global(.link-cards) {
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  /* Position footer content */
+  :global(.footer) {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  /* Hide role text on shorter viewports */
+  @media (max-height: 900px) {
+    :global(.role-text-container) {
+      display: none !important;
+    }
+  }
+</style>

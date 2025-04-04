@@ -1,0 +1,165 @@
+<div class="background">
+  <div class="particles" id="particles"></div>
+  <div class="lighting"></div>
+  <div class="grid"></div>
+</div>
+
+<script>
+  import { animate } from "animejs";
+
+  const particles = document.getElementById("particles");
+  if (!particles) throw new Error("Particles container not found");
+
+  // Create particles
+  const PARTICLE_COUNT = 250;
+  const PARTICLE_TYPES = ["circle", "square"];
+  const PARTICLE_SIZES = [2, 3, 4, 5, 6, 8, 10];
+  const PARALLAX_LAYERS = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8];
+
+  function createParticle() {
+    const particle = document.createElement("div");
+    particle.className = "particle";
+
+    // Random properties
+    const type =
+      PARTICLE_TYPES[Math.floor(Math.random() * PARTICLE_TYPES.length)];
+    const size =
+      PARTICLE_SIZES[Math.floor(Math.random() * PARTICLE_SIZES.length)];
+    const parallaxStrength =
+      PARALLAX_LAYERS[Math.floor(Math.random() * PARALLAX_LAYERS.length)];
+
+    // Random position - expand range to go off screen
+    const x = Math.random() * 140 - 20; // -20% to 120% of screen width
+    const y = Math.random() * 140 - 20; // -20% to 120% of screen height
+
+    // Generate a random green hue variation
+    const hue = 140 + (Math.random() * 20 - 10); // 130-150 range around pure green (140)
+    const saturation = 85 + (Math.random() * 30 - 15); // 70-100%
+    const lightness = 40 + (Math.random() * 20 - 10); // 30-50%
+
+    // Apply styles
+    particle.style.cssText = `
+      position: absolute;
+      width: ${size}px;
+      height: ${size}px;
+      left: ${x}%;
+      top: ${y}%;
+      border-radius: ${type === "circle" ? "50%" : "0"};
+      opacity: ${0.1 + Math.random() * 0.3};
+      background: hsl(${hue}, ${saturation}%, ${lightness}%);
+      filter: blur(1px) brightness(1.2);
+      box-shadow: 0 0 1px rgba(0, 255, 153, 0.3);
+    `;
+
+    // Store parallax strength as data attribute
+    particle.dataset.parallax = parallaxStrength.toString();
+
+    return particle;
+  }
+
+  // Create and add particles
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    fragment.appendChild(createParticle());
+  }
+  particles.appendChild(fragment);
+
+  // Animation logic
+  const maxMove = Math.min(window.innerWidth, window.innerHeight) * 0.25;
+
+  const onMouseMove = (e: MouseEvent) => {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    const mouseXPercent = (e.clientX - centerX) / centerX;
+    const mouseYPercent = (e.clientY - centerY) / centerY;
+
+    particles.querySelectorAll(".particle").forEach((particle) => {
+      const el = particle as HTMLElement;
+      const parallaxStrength = parseFloat(el.dataset.parallax || "0.5");
+      const moveX = mouseXPercent * maxMove * parallaxStrength;
+      const moveY = mouseYPercent * maxMove * parallaxStrength;
+
+      animate(el, {
+        translateX: moveX,
+        translateY: moveY,
+        duration: 1000,
+        easing: "easeOutCubic",
+      });
+    });
+  };
+
+  window.addEventListener("mousemove", onMouseMove);
+</script>
+
+<style>
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .particle {
+    position: absolute;
+    will-change: transform;
+    transform: translate(-50%, -50%); /* Base centering transform in CSS */
+  }
+
+  .lighting {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    background: rgba(0, 255, 153, 0.1);
+    animation: pulse 8s ease-in-out infinite;
+    z-index: 1;
+  }
+
+  .grid {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    z-index: 0;
+    background-image: linear-gradient(
+        rgba(0, 255, 153, 0.05) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(0, 255, 153, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px; /* Smaller grid */
+    transform: rotate(45deg);
+    left: -50%;
+    top: -50%;
+    animation: grid-move 15s linear infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes grid-move {
+    0% {
+      transform: rotate(45deg) translateY(0);
+    }
+    100% {
+      transform: rotate(45deg) translateY(-50px);
+    }
+  }
+</style>

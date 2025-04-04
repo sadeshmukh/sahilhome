@@ -1,0 +1,122 @@
+---
+
+---
+
+<div class="role-container">
+  <span class="role"></span>
+  <span class="cursor">|</span>
+</div>
+
+<script>
+  class TypeWriter {
+    private roles: string[];
+    private element: HTMLElement;
+    private waitTime: number;
+    private typeSpeed: number;
+    private deleteSpeed: number;
+    private roleIndex: number;
+    private isDeleting: boolean;
+    private currentText: string;
+
+    constructor(
+      roles: string[],
+      element: HTMLElement,
+      waitTime = 3000,
+      typeSpeed = 100,
+      deleteSpeed = 50
+    ) {
+      this.roles = roles;
+      this.element = element;
+      this.waitTime = waitTime;
+      this.typeSpeed = typeSpeed;
+      this.deleteSpeed = deleteSpeed;
+      this.roleIndex = 0;
+      this.isDeleting = false;
+      this.currentText = "";
+
+      this.type();
+    }
+
+    type() {
+      const currentRole = this.roles[this.roleIndex];
+
+      if (this.isDeleting) {
+        this.currentText = currentRole.substring(
+          0,
+          this.currentText.length - 1
+        );
+      } else {
+        this.currentText = currentRole.substring(
+          0,
+          this.currentText.length + 1
+        );
+      }
+
+      this.element.textContent = this.currentText;
+
+      let typeSpeed = this.isDeleting ? this.deleteSpeed : this.typeSpeed;
+
+      if (!this.isDeleting && this.currentText === currentRole) {
+        typeSpeed = this.waitTime;
+        this.isDeleting = true;
+      } else if (this.isDeleting && this.currentText === "") {
+        this.isDeleting = false;
+        this.roleIndex = (this.roleIndex + 1) % this.roles.length;
+        typeSpeed = 500;
+      }
+
+      setTimeout(() => this.type(), typeSpeed);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const roles = [
+      "Student @ Foothill High School",
+      "Developer",
+      "Tech Enthusiast",
+    ];
+    const element = document.querySelector(".role") as HTMLElement;
+    if (!element) return;
+    new TypeWriter(roles, element);
+  });
+</script>
+
+<style>
+  .role-container {
+    position: absolute;
+    top: calc(50% + 180px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Chakra Petch", monospace;
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: #00ff99;
+    opacity: 0.8;
+    text-align: center;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .cursor {
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<!-- Add this to your head in Layout or index.astro -->
+<link
+  href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400&display=swap"
+  rel="stylesheet"
+/>
