@@ -146,17 +146,17 @@
     #main {
       top: 40%;
     }
-
     .intro-text {
-      font-size: 2rem;
+      font-size: 1.5rem;
       transform: translateY(-2rem);
     }
-
     .base-svg,
     .animated-svg {
-      transform: translateY(2rem) scale(0.8);
+      transform: translateY(2rem);
+      width: calc(100% - 2rem); /* Leave 1rem gap on each side */
+      height: auto;
+      max-width: 400px; /* Prevent getting too large on tablets */
     }
-
     /* Adjust the links slot margin for mobile */
     :global(slot[name="links"]) {
       margin-top: 10rem;

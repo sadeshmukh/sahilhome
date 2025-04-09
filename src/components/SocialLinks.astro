@@ -196,36 +196,32 @@ const currentYear = new Date().getFullYear();
   @media (max-width: 768px) {
     .footer {
       bottom: 1.5rem;
-      gap: 2rem;
+      gap: 1.5rem;
     }
-
     .social-links {
       gap: 1rem;
-      width: 100%;
     }
-
     .social-link {
-      width: calc((100% - 2rem) / 3);
-      height: auto;
-      aspect-ratio: 1;
+      width: 2.75rem;
+      height: 2.75rem;
       padding: 0.5rem;
     }
-
     .social-link img {
-      width: 100%;
-      height: 100%;
-      max-width: 28px;
-      max-height: 28px;
-      margin: auto;
+      width: 20px;
+      height: 20px;
     }
-
     .built-with-container {
-      width: calc(100% - 2rem);
-      padding: 0.75rem 1rem;
+      padding: 0.75rem 1.25rem;
     }
-
+    .built-with {
+      font-size: 0.8rem;
+    }
     .built-with p {
-      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .built-with img {
+      width: 16px;
+      height: 16px;
     }
   }
 </style>
