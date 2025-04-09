@@ -141,6 +141,27 @@
     z-index: 2;
     margin-top: 12rem; /* Adjust this value as needed */
   }
+
+  @media (max-width: 768px) {
+    #main {
+      top: 40%;
+    }
+
+    .intro-text {
+      font-size: 2rem;
+      transform: translateY(-2rem);
+    }
+
+    .base-svg,
+    .animated-svg {
+      transform: translateY(2rem) scale(0.8);
+    }
+
+    /* Adjust the links slot margin for mobile */
+    :global(slot[name="links"]) {
+      margin-top: 10rem;
+    }
+  }
 </style>
 
 <script>

@@ -21,13 +21,31 @@ const links = [
 ];
 ---
 
-<div class="link-cards">
+<!-- Desktop version -->
+<div class="link-cards desktop">
   {
     links.map((link) => (
       <a href={link.url} class="card">
         <span class="icon">{link.icon}</span>
         <h2>{link.title}</h2>
         <p>{link.description}</p>
+      </a>
+    ))
+  }
+</div>
+
+<!-- Mobile version -->
+<div class="link-cards mobile">
+  {
+    links.map((link) => (
+      <a href={link.url} class="card">
+        <div class="card-content">
+          <span class="icon">{link.icon}</span>
+          <div class="text-content">
+            <h2>{link.title}</h2>
+            <p>{link.description}</p>
+          </div>
+        </div>
       </a>
     ))
   }
@@ -81,5 +99,61 @@ const links = [
     font-size: 0.9rem;
     margin: 0;
     line-height: 1.2;
+  }
+
+  /* Mobile specific styles */
+  .mobile {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+    width: 100%;
+  }
+
+  .mobile .card {
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  .mobile .card-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .mobile .text-content {
+    flex: 1;
+  }
+
+  .mobile .icon {
+    margin-bottom: 0;
+    font-size: 1.5rem;
+  }
+
+  /* Responsive breakpoints */
+  @media (max-width: 768px) {
+    .desktop {
+      display: none;
+    }
+    .mobile {
+      display: flex;
+    }
+    .link-cards {
+      width: 100%;
+      padding: 0 1rem;
+      box-sizing: border-box;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .desktop {
+      display: flex;
+    }
+    .mobile {
+      display: none;
+    }
   }
 </style>
