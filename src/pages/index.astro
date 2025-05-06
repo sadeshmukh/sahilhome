@@ -17,6 +17,14 @@ import OccludedPage from "../components/OccludedPage.astro";
       <RoleText />
     </div>
     <LinkCards />
+    <div id="last-listened" hidden>
+      <span class="music-emoji">🎵</span>
+      Listening to <span id="last-listened-song" class="last-listened-inner"
+      ></span> by
+      <span id="last-listened-artist" class="last-listened-inner"></span>
+      <!-- from -->
+      <span id="last-listened-album" class="last-listened-inner" hidden></span>
+    </div>
     <SocialLinks />
   </main>
 </Layout>
@@ -29,6 +37,25 @@ import OccludedPage from "../components/OccludedPage.astro";
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  #last-listened {
+    position: absolute;
+    top: 13rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    color: rgba(0, 255, 153, 0.7);
+    font-family: "Chakra Petch", monospace;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid rgba(0, 255, 153, 0.1);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .last-listened-inner {
+    font-weight: bold;
   }
 
   /* Position RoleText */
@@ -64,4 +91,62 @@ import OccludedPage from "../components/OccludedPage.astro";
       display: none !important;
     }
   }
+
+  @media (max-width: 768px) {
+    #last-listened {
+      width: calc(100% - 2rem);
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      top: 11rem;
+    }
+  }
 </style>
+
+<script>
+  async function getLastListened() {
+    const url = import.meta.env.PUBLIC_LAST_LISTENED_URL;
+    const response = await fetch(url);
+    const data = await response.json();
+    const artist = data.track.artist["#text"];
+    const album = data.track.album["#text"];
+    const nowplaying = data.track["@attr"]?.nowplaying;
+    const song = data.track.name;
+
+    const artistElement = document.querySelector(
+      "#last-listened-artist"
+    ) as HTMLElement | null;
+    const songElement = document.querySelector(
+      "#last-listened-song"
+    ) as HTMLElement | null;
+    const albumElement = document.querySelector(
+      "#last-listened-album"
+    ) as HTMLElement | null;
+    const lastListened = document.querySelector(
+      "#last-listened"
+    ) as HTMLElement | null;
+    // typescript needs to be happy :D
+
+    if (
+      artistElement &&
+      songElement &&
+      albumElement &&
+      nowplaying &&
+      lastListened
+    ) {
+      // make sure to reenable hidden!!
+      lastListened.hidden = false;
+      artistElement.textContent = artist;
+      songElement.textContent = song;
+      albumElement.textContent = album;
+    } else {
+      console.error("Failed to get last listened to music");
+      if (lastListened) {
+        lastListened.hidden = true;
+      }
+    }
+  }
+
+  setTimeout(getLastListened, 1000);
+  setInterval(getLastListened, 1000 * 60); // 1 minute
+</script>
