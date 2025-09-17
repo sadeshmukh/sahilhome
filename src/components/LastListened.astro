@@ -2,8 +2,10 @@
   <div class="compact-view">
     <span class="listening-text">Listening to</span>
     <span id="last-listened-song" class="last-listened-inner"></span>
-    by
-    <span id="last-listened-artist" class="last-listened-inner"></span>
+    <span class="artist-section">
+      by
+      <span id="last-listened-artist" class="last-listened-inner"></span>
+    </span>
     <span class="time-ago"></span>
   </div>
   <div class="expanded-view">
@@ -13,9 +15,11 @@
     <div class="track-info">
       <div class="song-name"></div>
       <div class="metadata">
-        <span class="artist"></span>
-        <span class="dot">•</span>
-        <span class="album"></span>
+        <span class="artist-album-section">
+          <span class="artist"></span>
+          <span class="dot">•</span>
+          <span class="album"></span>
+        </span>
         <span class="expanded-time-ago"></span>
       </div>
     </div>
@@ -229,14 +233,31 @@
             : "Last listened to";
         }
 
-        if (elements.artist) elements.artist.textContent = data.artist;
         if (elements.song) elements.song.textContent = data.track;
         if (elements.expandedSong)
           elements.expandedSong.textContent = data.track;
-        if (elements.expandedArtist)
-          elements.expandedArtist.textContent = data.artist;
-        if (elements.expandedAlbum)
-          elements.expandedAlbum.textContent = data.album || "Unknown Album";
+
+        // artist/album visibility
+        const artistSection = document.querySelector(
+          ".artist-section",
+        ) as HTMLElement;
+        const artistAlbumSection = document.querySelector(
+          ".artist-album-section",
+        ) as HTMLElement;
+
+        if (data.artist && data.artist.trim()) {
+          if (artistSection) artistSection.style.display = "inline";
+          if (artistAlbumSection) artistAlbumSection.style.display = "inline";
+
+          if (elements.artist) elements.artist.textContent = data.artist;
+          if (elements.expandedArtist)
+            elements.expandedArtist.textContent = data.artist;
+          if (elements.expandedAlbum)
+            elements.expandedAlbum.textContent = data.album || "Unknown Album";
+        } else {
+          if (artistSection) artistSection.style.display = "none";
+          if (artistAlbumSection) artistAlbumSection.style.display = "none";
+        }
 
         // *non-current* tracks
         if (!data.now_playing && data.when) {
