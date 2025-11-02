@@ -11,7 +11,7 @@
   if (!particles) throw new Error("Particles container not found");
 
   // Create particles
-  const PARTICLE_COUNT = 250;
+  const PARTICLE_COUNT = 150; // Reduced from 250 for better performance
   const PARTICLE_TYPES = ["circle", "square"];
   const PARTICLE_SIZES = [2, 3, 4, 5, 6, 8, 10];
   const PARALLAX_LAYERS = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8];
@@ -67,12 +67,17 @@
   // Animation logic
   const maxMove = Math.min(window.innerWidth, window.innerHeight) * 0.25;
 
-  const onMouseMove = (e: MouseEvent) => {
+  // Throttle function for performance
+  let rafId: number | null = null;
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+
+  const updateParticles = () => {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
 
-    const mouseXPercent = (e.clientX - centerX) / centerX;
-    const mouseYPercent = (e.clientY - centerY) / centerY;
+    const mouseXPercent = (lastMouseX - centerX) / centerX;
+    const mouseYPercent = (lastMouseY - centerY) / centerY;
 
     particles.querySelectorAll(".particle").forEach((particle) => {
       const el = particle as HTMLElement;
@@ -87,6 +92,18 @@
         easing: "easeOutCubic",
       });
     });
+
+    rafId = null;
+  };
+
+  const onMouseMove = (e: MouseEvent) => {
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+
+    // Use requestAnimationFrame to throttle updates
+    if (rafId === null) {
+      rafId = requestAnimationFrame(updateParticles);
+    }
   };
 
   window.addEventListener("mousemove", onMouseMove);
@@ -160,6 +177,19 @@
     }
     100% {
       transform: rotate(45deg) translateY(-50px);
+    }
+  }
+
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .lighting {
+      animation: none;
+    }
+    .grid {
+      animation: none;
+    }
+    .particle {
+      will-change: auto;
     }
   }
 </style>
