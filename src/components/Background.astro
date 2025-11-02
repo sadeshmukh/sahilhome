@@ -67,10 +67,10 @@
   // Animation logic
   const maxMove = Math.min(window.innerWidth, window.innerHeight) * 0.25;
 
-  // Throttle function for performance
-  let rafId: number | null = null;
-  let lastMouseX = 0;
-  let lastMouseY = 0;
+  // Throttle function for performance - only update on next animation frame
+  let rafId: number | null = null; // Animation frame ID for throttling
+  let lastMouseX = 0; // Cached mouse X coordinate
+  let lastMouseY = 0; // Cached mouse Y coordinate
 
   const updateParticles = () => {
     const centerX = window.innerWidth / 2;
@@ -107,6 +107,14 @@
   };
 
   window.addEventListener("mousemove", onMouseMove);
+
+  // Cleanup on page visibility change to save resources
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  });
 </script>
 
 <style>
