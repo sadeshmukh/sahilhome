@@ -67,12 +67,17 @@
   // Animation logic
   const maxMove = Math.min(window.innerWidth, window.innerHeight) * 0.25;
 
-  const onMouseMove = (e: MouseEvent) => {
+  // Throttle function for performance - only update on next animation frame
+  let rafId: number | null = null; // Animation frame ID for throttling
+  let lastMouseX = 0; // Cached mouse X coordinate
+  let lastMouseY = 0; // Cached mouse Y coordinate
+
+  const updateParticles = () => {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
 
-    const mouseXPercent = (e.clientX - centerX) / centerX;
-    const mouseYPercent = (e.clientY - centerY) / centerY;
+    const mouseXPercent = (lastMouseX - centerX) / centerX;
+    const mouseYPercent = (lastMouseY - centerY) / centerY;
 
     particles.querySelectorAll(".particle").forEach((particle) => {
       const el = particle as HTMLElement;
@@ -87,9 +92,29 @@
         easing: "easeOutCubic",
       });
     });
+
+    rafId = null;
+  };
+
+  const onMouseMove = (e: MouseEvent) => {
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+
+    // Use requestAnimationFrame to throttle updates
+    if (rafId === null) {
+      rafId = requestAnimationFrame(updateParticles);
+    }
   };
 
   window.addEventListener("mousemove", onMouseMove);
+
+  // Cleanup on page visibility change to save resources
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  });
 </script>
 
 <style>
@@ -160,6 +185,19 @@
     }
     100% {
       transform: rotate(45deg) translateY(-50px);
+    }
+  }
+
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .lighting {
+      animation: none;
+    }
+    .grid {
+      animation: none;
+    }
+    .particle {
+      will-change: auto;
     }
   }
 </style>
